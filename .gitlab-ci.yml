@@ -1,0 +1,17 @@
+image: alpine
+stages:
+  - query
+
+Query:
+  stage: query
+  before_script:
+    - apk update
+    - apk add mysql-client
+  script:
+    - mysql --user rfamro --host mysql-rfam-public.ebi.ac.uk --port 4497 --database Rfam < query.sql | tee result.txt
+  artifacts:
+    paths:
+      - result.txt
+    expire_in: 1 day
+  only:
+    - dev
